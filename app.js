@@ -1,7 +1,5 @@
 // Storage Controller
 
-
-
 // Item controller
 
 const ItemCtrl = (function() {
@@ -14,7 +12,6 @@ const ItemCtrl = (function() {
 
   //Data Structure / State
   const data = {
-
     items: [
       {
         id: 0,
@@ -36,33 +33,52 @@ const ItemCtrl = (function() {
     totalCalories: 0
   };
 
-
-
-// Public Methods
+  // Public Methods
   return {
+    addItem: function(name, calories) {
+      let ID;
+      //Create id
+      if (data.items.length > 0) {
+        ID = data.items[data.items.length - 1].id + 1;
+      } else {
+        ID = 0;
+      }
+
+      //Calories to number
+      calories = parseInt(calories);
+
+      // Create new item
+      newItem = new Item(ID, name, calories);
+
+      //Add to items array
+      data.items.push(newItem);
+
+      return newItem;
+    },
     getItems: function() {
       return data.items;
     },
-    logData: function(){
+    logData: function() {
       return data;
     }
   };
 })();
 
-
-
 // UI Controller
 
 const UICtrl = (function() {
   const UISelectors = {
-    itemList: '#item-list'
-  }
+    itemList: "#item-list",
+    addBtn: ".add-btn",
+    itemNameInput: "#item-name",
+    itemCaloriesInput: "#item-calories"
+  };
 
   // Public methods
   return {
-    populateItemList: function(items){
-      let html='';
-      items.forEach(function(item){
+    populateItemList: function(items) {
+      let html = "";
+      items.forEach(function(item) {
         html += `
         <li class="collection-item" id="item-${item.id}">
         <strong>${item.name}: </strong> <em>${item.calories} Calories</em>
@@ -74,30 +90,62 @@ const UICtrl = (function() {
       });
       // Insert list items
       document.querySelector(UISelectors.itemList).innerHTML = html;
+    },
+    getItemInput: function() {
+      return {
+        name: document.querySelector(UISelectors.itemNameInput).value,
+        calories: document.querySelector(UISelectors.itemCaloriesInput).value
+      };
+    },
+    getSelectors: function() {
+      return UISelectors;
     }
-  }
+  };
 })();
-
-
 
 //App Controller
 
 const AppCtrl = (function(ItemCtrl, UICtrl) {
+  // Load event listeners
+  const loadEventListeners = function() {
+    // Get UI Selectors
+    const UISelectors = UICtrl.getSelectors();
+
+    // Add Item Event
+    document
+      .querySelector(UISelectors.addBtn)
+      .addEventListener("click", itemAddSubmit);
+  };
+
+  // Add Item submit
+  const itemAddSubmit = function(e) {
+    // Get form input from ui controller
+    const input = UICtrl.getItemInput();
+
+    // Check for name and calorie input
+    if (input.name !== "" && input.calories !== "") {
+      // Add item
+      const newItem = ItemCtrl.addItem(input.name, input.calories);
+    }
+
+    e.preventDefault();
+  };
 
   // Public methods
   return {
-    init: function(){
+    init: function() {
       // Fetch items from data structure
       const items = ItemCtrl.getItems();
 
       // Populate list with items
       UICtrl.populateItemList(items);
 
+      //Load event listeners
+
+      loadEventListeners();
     }
-  }
-
+  };
 })(ItemCtrl, UICtrl);
-
 
 // Init app
 AppCtrl.init();
