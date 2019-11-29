@@ -100,13 +100,13 @@ const UICtrl = (function() {
     getSelectors: function() {
       return UISelectors;
     },
-    addListItem: function (item){
+    addListItem: function(item) {
       // Show the list
-      document.querySelector(UISelectors.itemList).style.display = 'block';
+      document.querySelector(UISelectors.itemList).style.display = "block";
       //Create li element
-      const li = document.createElement('li');
+      const li = document.createElement("li");
       //Add class
-      li.className = 'collection-item';
+      li.className = "collection-item";
       //Add id
       li.id = `item-${item.id}`;
       //Add html
@@ -115,15 +115,16 @@ const UICtrl = (function() {
         <i class="edit-item fa fa-pencil"></i>
       </a>`;
       // Insert item
-      document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', li)
-
+      document
+        .querySelector(UISelectors.itemList)
+        .insertAdjacentElement("beforeend", li);
     },
-    clearInput: function(){
-      document.querySelector(UISelectors.itemNameInput).value = '';
-      document.querySelector(UISelectors.itemCaloriesInput).value = '';
+    clearInput: function() {
+      document.querySelector(UISelectors.itemNameInput).value = "";
+      document.querySelector(UISelectors.itemCaloriesInput).value = "";
     },
-    hideList: function(){
-      document.querySelector(UISelectors.itemList).style.display = 'none';
+    hideList: function() {
+      document.querySelector(UISelectors.itemList).style.display = "none";
     }
   };
 })();
@@ -169,12 +170,12 @@ const AppCtrl = (function(ItemCtrl, UICtrl) {
       const items = ItemCtrl.getItems();
 
       //Check if any items
-      if ( items.length === 0 ) {
+      if (items.length === 0) {
         UICtrl.hideList();
       } else {
         // Populate list with items
         UICtrl.populateItemList(items);
-      }      
+      }
 
       //Load event listeners
 
